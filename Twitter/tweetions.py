@@ -4,8 +4,8 @@ import emoji
 
 
 def menu():
-    #hedef = input("Hedef kisinin kullanici adini girin :")
-    tweetleri_cek("EceSeckinCom")
+    hedef = input("Hedef kisinin kullanici adini girin :")
+    tweetleri_cek(hedef)
 
 def tweetleri_cek(hedef):
     url = "https://twitter.com/"+hedef
@@ -25,7 +25,6 @@ def tweetleri_cek(hedef):
         for i in result:
             emojiler.append(extract_emojis(i)) #Emojiler adli liste ise demojize edilmis halleri tutuyor. Karsilastirma icin bize bu liste lazim
         oranla(emojiler)
-        print(result,emojiler,sep = "\n")
         del result
 
 def extract_emojis(string):
