@@ -1,7 +1,7 @@
 import requests
 from bs4 import BeautifulSoup as bs
 import emoji
-
+from PIL import Image, ImageDraw
 
 def menu():
     hedef = input("Hedef kisinin kullanici adini girin :")
@@ -61,10 +61,24 @@ def oranla(arr):
     if(boyut==0):
         print("Bu kisi hakkinda bilgi edinemedik!")
     else:
-        notr = int( ((boyut-(mutlu+mutsuz))/boyut)*100    )
-        mutlu = int((mutlu/boyut)*100)
-        mutsuz = int((mutsuz/boyut)*100)
-        print("Bu kisi %{} mutlu, %{} mutsuz, %{} ise notr!".format(mutlu,mutsuz,notr))
-    
+        notr = float( ((boyut-(mutlu+mutsuz))/boyut)*100    )
+        mutlu = float((mutlu/boyut)*100)
+        mutsuz = float((mutsuz/boyut)*100)
+        print("Bu kisi %{} mutlu, %{} mutsuz, %{} ise notr!".format(round(mutlu,2),round(mutsuz,2),round(notr,2)))
+        resme_dok(mutlu,mutsuz,notr)
+
+def resme_dok(mutlu,mutsuz,notr):
+    notr = (360*notr)/100
+    mutlu = (360*mutlu)/100
+    mutsuz = (360*mutsuz)/100
+    w, h = 800, 600
+    bosluk = [(10, 10), (w - 10, h - 10)]
+    img = Image.new("RGB", (w, h), "#f9f9f9")
+    dctx = ImageDraw.Draw(img)
+    dctx.pieslice(bosluk, start=0, end=mutlu, fill="blue", outline="blue")
+    dctx.pieslice(bosluk, start=mutlu, end=mutsuz+mutlu, fill="orange", outline="orange")
+    dctx.pieslice(bosluk, start=mutlu+mutsuz, end=notr+mutsuz+mutlu, fill="green", outline="green")
+    del dctx 
+    img.save("./sonuc.jpg")
    
 menu()
