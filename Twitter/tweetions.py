@@ -3,6 +3,7 @@ from bs4 import BeautifulSoup as bs
 import emoji
 from PIL import Image, ImageDraw
 
+
 def menu():
     hedef = input("Hedef kisinin kullanici adini girin :")
     tweetleri_cek(hedef)
@@ -18,7 +19,7 @@ def tweetleri_cek(hedef):
         result = []
         emojiler = []
         corba = bs(istek.text,"lxml")
-        for p in corba.find_all('img',{'class':'Emoji Emoji--forText'}):    
+        for p in corba.find_all('img',{'class':'Emoji Emoji--forText'}):
             emoji = str(p)
             result.append(emoji[10])
         # Result emojileri direkt olarak kendi hallerinde tutuyor
@@ -68,17 +69,23 @@ def oranla(arr):
         resme_dok(mutlu,mutsuz,notr)
 
 def resme_dok(mutlu,mutsuz,notr):
-    notr = (360*notr)/100
-    mutlu = (360*mutlu)/100
-    mutsuz = (360*mutsuz)/100
-    w, h = 800, 600
+    notr1 = (360*notr)/100
+    mutlu1 = (360*mutlu)/100
+    mutsuz1 = (360*mutsuz)/100
+    w, h = 500, 500
     bosluk = [(10, 10), (w - 10, h - 10)]
+    
     img = Image.new("RGB", (w, h), "#f9f9f9")
-    dctx = ImageDraw.Draw(img)
-    dctx.pieslice(bosluk, start=0, end=mutlu, fill="blue", outline="blue")
-    dctx.pieslice(bosluk, start=mutlu, end=mutsuz+mutlu, fill="orange", outline="orange")
-    dctx.pieslice(bosluk, start=mutlu+mutsuz, end=notr+mutsuz+mutlu, fill="green", outline="green")
-    del dctx 
+    dialog = ImageDraw.Draw(img)
+    dialog.pieslice(bosluk, start=0, end=mutlu1, fill="blue", outline="blue")
+    dialog.pieslice(bosluk, start=mutlu1, end=mutsuz1+mutlu1, fill="orange", outline="orange")
+    dialog.pieslice(bosluk, start=mutlu1+mutsuz1, end=notr1+mutsuz1+mutlu1, fill="green", outline="green")
+    dialog.text((0,0),"Notr Emojiler %{}".format(round(notr,2)),fill="black",font=None)
+    dialog.text((0,10),"Mutlu Emojiler %{}".format(round(mutlu,2)),fill="black",font=None)
+    dialog.text((0,20),"Negatif Emojiler %{}".format(round(mutsuz,2)),fill="black",font=None)
+
+    del dialog 
     img.save("./sonuc.jpg")
-   
+
+
 menu()
